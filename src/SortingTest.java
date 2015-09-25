@@ -1,6 +1,8 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -9,10 +11,15 @@ import java.util.Random;
  */
 
 public class SortingTest {
-  private static final int ARRAY_LEN = 10;
-// (!) To add a collection of sortings
-  private static Integer[] generateArray(final int arrayLen)
-  {
+  private static final int ARRAY_LEN = 100;
+  private static final Collection<Sorting<Integer>> sortings = new ArrayList<>();
+
+  static {
+    sortings.add(CocktailSort::sort);
+    sortings.add(TreeSort::sort);
+  }
+
+  private static Integer[] generateArray(final int arrayLen) {
     final Random rand = new Random(System.currentTimeMillis());
     final Integer[] array = new Integer[arrayLen];
     for (int i = 0; i < array.length; i++)
@@ -20,8 +27,7 @@ public class SortingTest {
     return array;
   }
 
-  public static <T> boolean containsAll(Sorting<T> sorting, final T[] array, Comparator<T> cmp)
-  {
+  public static <T> boolean containsAll(Sorting<T> sorting, final T[] array, Comparator<T> cmp) {
     final T[] originalArray = Arrays.copyOf(array, array.length);
     sorting.sort(array, cmp);
     if (originalArray.length != array.length)
@@ -37,8 +43,8 @@ public class SortingTest {
     }
     return true;
   }
-  public static <T> boolean isSorted(Sorting<T> sorting, final T[] array, Comparator<T> cmp)
-  {
+
+  public static <T> boolean isSorted(Sorting<T> sorting, final T[] array, Comparator<T> cmp) {
     sorting.sort(array, cmp);
     for (int i = 0; i < array.length - 1; i++) {
       if (0 < cmp.compare(array[i], array[i + 1]))
@@ -48,40 +54,41 @@ public class SortingTest {
   }
 
   @Test
-  public void extremeCasesTest()
-  {
+  public void extremeCasesTest() {
     ComparatorInt cmpInt = new ComparatorInt();
     final Integer[] emptyArray = new Integer[0];
     final Integer[] sortedDescendingArray = new Integer[ARRAY_LEN];
     final Integer[] sortedAscendingArray = new Integer[ARRAY_LEN];
 
-    for (int i = 0; i < sortedAscendingArray.length; i++) {
-      sortedAscendingArray[i] = i;
-      sortedDescendingArray[i] = sortedDescendingArray.length - i;
+    for (final Sorting<Integer> sort : sortings) {
+      for (int i = 0; i < sortedAscendingArray.length; i++) {
+        sortedAscendingArray[i] = i;
+        sortedDescendingArray[i] = sortedDescendingArray.length - i;
+      }
+      Assert.assertTrue(isSorted(sort, emptyArray, cmpInt));
+      Assert.assertTrue(containsAll(sort, emptyArray, cmpInt));
+      Assert.assertTrue(isSorted(sort, sortedDescendingArray, cmpInt));
+      Assert.assertTrue(containsAll(sort, sortedDescendingArray, cmpInt));
+      Assert.assertTrue(isSorted(sort, sortedAscendingArray, cmpInt));
+      Assert.assertTrue(containsAll(sort, sortedAscendingArray, cmpInt));
     }
-    Assert.assertTrue(isSorted(CocktailSort::sort, emptyArray, cmpInt));
-    Assert.assertTrue(isSorted(CocktailSort::sort, sortedDescendingArray, cmpInt));
-    Assert.assertTrue(isSorted(CocktailSort::sort, sortedAscendingArray, cmpInt));
-  }
-  @Test
-  public void isSortedTest()
-  {
-    ComparatorInt cmpInt = new ComparatorInt();
-    final Integer[] array = generateArray(ARRAY_LEN);
-    Assert.assertTrue(isSorted(CocktailSort::sort, array, cmpInt));
-  }
-  @Test
-  public void containsAllTest()
-  {
-    ComparatorInt cmpInt = new ComparatorInt();
-    final Integer[] array = generateArray(ARRAY_LEN);
-    Assert.assertTrue(containsAll(CocktailSort::sort, array, cmpInt));
   }
 
-  /*public static void main(String[] args)
-  {
+  @Test
+  public void isSortedTest() {
+    ComparatorInt cmpInt = new ComparatorInt();
     final Integer[] array = generateArray(ARRAY_LEN);
-  }*/
+    for (final Sorting<Integer> sort : sortings)
+      Assert.assertTrue(isSorted(sort, array, cmpInt));
+  }
+
+  @Test
+  public void containsAllTest() {
+    ComparatorInt cmpInt = new ComparatorInt();
+    final Integer[] array = generateArray(ARRAY_LEN);
+    for (final Sorting<Integer> sort : sortings)
+      Assert.assertTrue(containsAll(sort, array, cmpInt));
+  }
 
   class ComparatorInt implements Comparator<Integer> {
     @Override
