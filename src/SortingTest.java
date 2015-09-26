@@ -11,7 +11,7 @@ import java.util.Random;
  */
 
 public class SortingTest {
-  private static final int ARRAY_LEN = 100;
+  private static final int ARRAY_LEN = 10;
   private static final Collection<Sorting<Integer>> sortings = new ArrayList<>();
 
   static {
@@ -32,13 +32,13 @@ public class SortingTest {
     sorting.sort(array, cmp);
     if (originalArray.length != array.length)
       return false;
-    for (int i = 0; i < originalArray.length; i++) {
+    for (int i = 0; i < array.length; i++) {
       int j;
-      for (j = 0; j < array.length; j++) {
-        if (0 == cmp.compare(array[j], originalArray[i]))
+      for (j = 0; j < originalArray.length; j++) {
+        if (0 == cmp.compare(array[i], originalArray[j]))
           break;
       }
-      if (j == array.length)
+      if (j == originalArray.length)
         return false;
     }
     return true;
