@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Cocktail_and_Tree_Sortings.iml" filepath="$PROJECT_DIR$/Cocktail_and_Tree_Sortings.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../cocktail_and_tree_sort/cocktail_and_tree_sort.iml" filepath="$PROJECT_DIR$/../cocktail_and_tree_sort/cocktail_and_tree_sort.iml" />
     </modules>
   </component>
 </project>

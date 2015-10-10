@@ -22,7 +22,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="cocktail_and_tree_sort" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
